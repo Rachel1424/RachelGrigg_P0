@@ -1,0 +1,87 @@
+package com.revature.dao;
+
+import java.io.*;
+import java.util.List;
+import java.util.ArrayList;
+
+import com.revature.beans.User;
+
+/**
+ * Implementation of UserDAO that reads and writes to a file
+ */
+public class UserDaoFile implements UserDao {
+
+	public static String fileLocation = "";
+
+	public User addUser(User user) {
+		// TODO Auto-generated method stub
+	/*	User u = null;
+		List<User> runner = getAllUsers();
+		for (User temp : runner) {
+
+			if (username == temp.getUsername() && != temp.getUser()) {
+			// none of this is correct learn more and come back later if possible	
+			}*/
+		return null;
+	}
+		
+		
+
+	public User getUser(Integer userId) {
+		// TODO Auto-generated method stub
+		User u = null;
+		List<User> runner = getAllUsers();
+		for (User temp : runner) {
+
+			if (userId == temp.getId()) {
+
+				u = temp;
+				break;
+			}
+
+		}
+		// addUserToStream(temp);
+		return u;
+	}
+
+	public User getUser(String username, String pass) {
+		// TODO Auto-generated method stub
+		User u = null;
+		List<User> runner = getAllUsers();
+		for (User temp : runner) {
+
+			if (username == temp.getUsername() && pass == temp.getPassword()) {
+
+				u = temp;
+				break;
+			}
+
+		}
+		 addUsersToStream(runner);
+		return u;
+	}
+
+	public List<User> getAllUsers() {
+		// TODO Auto-generated method stub
+		List<User> users = new ArrayList<>();
+		try (ObjectInputStream ufr = new ObjectInputStream(new FileInputStream(fileLocation))) {
+			users = (List<User>) ufr.readObject();
+		} catch (FileNotFoundException e) {
+			return users;
+		} catch (IOException | ClassNotFoundException e) {
+			System.out.println("Exception thrown in getAllUsers()");
+		}
+		return users;
+	}
+
+	public User updateUser(User u) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public boolean removeUser(User u) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+}

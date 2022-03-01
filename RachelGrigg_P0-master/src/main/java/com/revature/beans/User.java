@@ -12,7 +12,7 @@ public class User implements Serializable {
 	/**Automatically generated universally unique identifier */
 	private static final long serialVersionUID = -8630467975639842515L;
 	
-	public static enum UserType {
+	public static enum UserType { 
 		CUSTOMER, EMPLOYEE
 	}
 	private Integer id;

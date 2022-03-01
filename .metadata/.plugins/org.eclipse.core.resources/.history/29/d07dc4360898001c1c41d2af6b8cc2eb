@@ -1,0 +1,130 @@
+package com.revature.driver;
+
+import java.io.IOException;
+import java.util.Map;
+import java.util.Scanner;
+
+import org.apache.log4j.Logger;
+
+import com.revature.beans.*;
+import com.revature.dao.*;
+import com.revature.exceptions.*;
+import com.revature.services.*;
+
+import com.revature.utils.ConnectionUtil;
+
+/**
+ * This is the entry point to the application
+ */
+public class BankApplicationDriver {
+
+	static User user = new User();
+	static UserDaoDB doa = new UserDaoDB();
+	static UserService use = new UserService(doa, null);
+
+	static Scanner scan = new Scanner(System.in);
+	static Logger log = Logger.getLogger(BankApplicationDriver.class);
+
+	public static void main(String[] args) {
+        // your code here...
+
+      
+
+        //user.getAccounts();
+
+   
+
+            System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n************************************************");
+            System.out.println(" ");
+            System.out.println("\t Welcome to RevRae Bank");
+            System.out.println("To log in to an existing account please press 1 ");
+            System.out.println(" ");
+            System.out.println("To creat a new account please press 2");
+            System.out.println(" ");
+            System.out.println("************************************************\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+
+            int choice = scan.nextInt();
+
+            switch (choice) {
+
+            case 1:
+            	
+            	System.out.println(" If you are logging in as a Customer please press 1");
+            	
+            	System.out.println(" If you are logging in as an Employee please press 2");
+            	int choiceA = scan.nextInt();
+            	
+            	switch (choiceA) {
+            	
+            	case 1:
+            	//login customer
+            		System.out.println(" It makes it to customer login ");
+            	//	BankApplicationDriver.loginUser();
+            		
+            		break;
+            		
+            	case 2:
+            		//login Employee
+            		
+            		System.out.println(" It makes it to Employee login ");
+            		
+            		//BankApplicationDriver.loginUser();
+            		break;
+            	}
+            	
+                  
+                
+                         
+              case 2:
+                	
+            	  BankApplicationDriver.createUser();   
+            	  
+                         break;
+
+            }
+
+        }
+
+    
+
+    public static void createUser() {
+
+     
+    	//user.setUsername(userName);
+            
+
+        
+
+      
+    }
+
+public static void loginUser(){
+
+   Scanner scan = new Scanner(System.in);
+
+        String userName;
+
+        while (true) {
+            System.out.println("Please enter username: ");
+
+            userName = scan.nextLine();
+
+            user.getUsername();
+            
+
+            System.out.println("Please enter a password: ");
+            String pass = scan.nextLine();
+
+            user.setPassword(pass);
+
+            user = use.login(userName, pass); 
+
+            if (user.equals(userName)) 
+
+            	System.out.println("Username already exists. ");
+                break;
+}
+
+    }
+}
+

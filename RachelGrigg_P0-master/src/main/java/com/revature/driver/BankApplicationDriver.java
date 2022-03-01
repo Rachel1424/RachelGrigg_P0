@@ -1,12 +1,145 @@
 package com.revature.driver;
 
+import java.io.IOException;
+import java.util.Map;
+import java.util.Scanner;
+
+import org.apache.log4j.Logger;
+
+import com.revature.beans.*;
+import com.revature.beans.User.UserType;
+import com.revature.dao.*;
+import com.revature.exceptions.*;
+import com.revature.services.*;
+
+import com.revature.utils.ConnectionUtil;
+
+
 /**
  * This is the entry point to the application
  */
 public class BankApplicationDriver {
 
-	public static void main(String[] args) {
-		// your code here...
-	}
+	static User user = new User();
+	static UserDaoDB doa = new UserDaoDB();
+	static UserService use = new UserService(doa, null);
 
+	static Scanner scan = new Scanner(System.in);
+	static Logger log = Logger.getLogger(BankApplicationDriver.class);
+
+	public static void main(String[] args) {
+        // your code here...
+
+      
+
+        
+
+   
+
+            System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n************************************************\n");
+            System.out.println("\t    Welcome to RevRae Bank");
+            System.out.println("To log in to an existing account please press 1 \n");
+            System.out.println("\tTo creat a new account please press 2 \n");
+            System.out.println("************************************************\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+           
+            
+          
+            
+            int choice = scan.nextInt();
+
+            switch (choice) { 
+
+            case 1:
+            	
+            	
+            	//login customer
+            		System.out.println(" It makes it to customer login ");
+            		loginUser();
+            		
+            		
+            		
+            		
+            	
+            	
+                  
+                
+                         
+              case 2:
+                	
+            	  BankApplicationDriver.createUser();   
+            	  
+                         break;
+              default:
+          		
+          		System.out.println(" You Have input an invalid entry. Goodbye ");
+          		break;
+            }
+
+        }
+
+    
+
+    public static void createUser() {
+
+     
+    	//user.setUsername(userName);
+            
+
+        
+
+      
+    }
+
+public static void loginUser(){
+
+   Scanner scan = new Scanner(System.in);
+
+        String userName;
+
+        while (true) {
+            System.out.println("Please enter username: ");
+
+            userName = scan.nextLine();
+
+            user.getUsername();
+            
+
+            System.out.println("Please enter a password: ");
+            String pass = scan.nextLine();
+
+            user.setPassword(pass);
+
+            user = use.login(userName, pass); 
+
+           // if (user.equals(userName)) 
+
+            	System.out.println("Username already exists. ");
+            	String newU = scan.nextLine();
+            	
+                break;
 }
+
+       
+    }
+
+// not a real method to be used just a reminder of syntax for now please delete before posting
+	public static void CustomervsEmployee(){
+		
+		User user = new User();
+		user.setUserType(User.UserType.CUSTOMER);
+	
+		 if( user.getUserType() == User.UserType.EMPLOYEE) {
+			 
+			 System.out.println("this is a customer you did it");
+			 //branch off what they can do from here. two methods
+			 
+		 }
+			 
+			 
+		
+		 
+	
+}
+}
+
+

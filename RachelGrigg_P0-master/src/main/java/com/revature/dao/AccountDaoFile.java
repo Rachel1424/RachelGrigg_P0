@@ -1,6 +1,7 @@
 package com.revature.dao;
 
 import java.util.List;
+import java.io.*;
 
 import com.revature.beans.Account;
 import com.revature.beans.User;
@@ -14,16 +15,30 @@ public class AccountDaoFile implements AccountDao {
 
 	public Account addAccount(Account a) {
 		// TODO Auto-generated method stub
+		
+		// remeber Users has a list of Account named accounts
 		return null;
 	}
 
 	public Account getAccount(Integer actId) {
 		// TODO Auto-generated method stub
-		return null;
+		
+		Account a = null;
+		List<Account> acon = getAccounts();
+		for (Account account: acon) {
+			if (account.getId().equals(actId)) {
+				a = account;
+				break;
+			}
+		}
+		//addAccountsToStream(acon);
+		return a;
 	}
+
 
 	public List<Account> getAccounts() {
 		// TODO Auto-generated method stub
+		
 		return null;
 	}
 
