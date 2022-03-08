@@ -1,0 +1,116 @@
+package com.revature.dao;
+
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.revature.beans.User;
+
+/**
+ * Implementation of UserDAO that reads/writes to a relational database
+ */
+
+
+public class UserDaoDB implements UserDao {
+	public static Connection conec;
+	public static Statement stat;
+	public static PreparedStatement prestat;
+	public static ResultSet rels;
+	
+	public User addUser(User user) {
+		// TODO Auto-generated method stub
+		List<User> exis = getAllUsers();
+		exis.add(user);
+		try {
+			conec = DriverManager.getConnection("jdbc:mysql://localhost:3306/revature", "root", "Okaythen12wow");
+		 
+		stat = conec.createStatement();
+		rels = stat.executeQuery("select * from users");
+		
+		return user;
+		}
+	
+
+	public User getUser(Integer userId) {
+		// TODO Auto-generated method stub
+		User u = null;
+		List<User> runner = getAllUsers();
+		for (User temp : runner) {
+
+			if (userId == temp.getId()) {
+
+				u = temp;
+				break;
+			}
+
+		}
+		
+		return u;
+	}
+
+	public User getUser(String username, String pass) {
+		// TODO Auto-generated method stub
+		User u = null;
+		List<User> runner = getAllUsers();
+		for (User temp : runner) {
+
+			if (username == temp.getUsername() && pass == temp.getPassword()) {
+
+				u = temp;
+				break;
+			}
+
+		}
+	
+	return u;
+
+	}
+
+	public List<User> getAllUsers() {
+		// TODO Auto-generated method stub
+		
+		
+		List<User> users = new ArrayList<>();
+		 String testin = "select * from employee";
+		try 
+			{
+			//conec = DriverManager.getConnection("jdbc:mysql://localhost:3306/revature", "root", "Okaythen12wow");
+			
+			stat = conec.createStatement();
+			rels = stat.executeQuery(testin);
+			
+			
+			while (rels.next())
+				
+			}
+			return users;
+		
+		
+	
+	}
+
+	public User updateUser(User u) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public boolean removeUser(User u) {
+		List<User> del = getAllUsers();
+		int fnId = u.getId();
+		User ted = getUser(fnId);
+		del.remove(fnId);
+		if(ted == u) {
+			
+			System.out.println("User Sucessfully deleted");
+			return true;
+		}
+		System.out.println("Unable to remove user. Please check that all information is correct.");
+		return false;
+	}
+
+}

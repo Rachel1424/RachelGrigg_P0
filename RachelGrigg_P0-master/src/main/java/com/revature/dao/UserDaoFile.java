@@ -16,16 +16,15 @@ public class UserDaoFile implements UserDao {
 
 	public User addUser(User newB) {
 		// TODO Auto-generated method stub
-		//User u = null; might not need this
 		List<User> exis = getAllUsers();
 		exis.add(newB);
 		try {
 			ObjectOutputStream op = new ObjectOutputStream(new FileOutputStream(fileLocation));
 		} /*catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
+		
 			System.out.println("File exception in addUser");
 		} */catch (IOException e) {
-			// TODO Auto-generated catch block
+			
 			System.out.println("IO exception in addUser");
 		}{
 			

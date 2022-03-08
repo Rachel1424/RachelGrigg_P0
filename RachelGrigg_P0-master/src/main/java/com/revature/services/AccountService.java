@@ -1,9 +1,13 @@
 package com.revature.services;
 
+import java.util.List;
+
 import com.revature.beans.Account;
 import com.revature.beans.User;
 import com.revature.dao.AccountDao;
+import com.revature.dao.AccountDaoDB;
 import com.revature.exceptions.OverdraftException;
+import com.revature.exceptions.UsernameAlreadyExistsException;
 
 /**
  * This class should contain the business logic for performing operations on Accounts
@@ -12,7 +16,7 @@ public class AccountService {
 	
 	public AccountDao actDao;
 	public static final double STARTING_BALANCE = 25d;
-	
+	static AccountDaoDB aoa = new AccountDaoDB();
 	public AccountService(AccountDao dao) {
 		this.actDao = dao;
 	}
@@ -53,7 +57,17 @@ public class AccountService {
 	 * Creates a new account for a given User
 	 * @return the Account object that was created
 	 */
-	public Account createNewAccount(User u) {
+	public Account createNewAccount(User a) {
+		List<Account> acc = aoa.getAccounts();
+		acc.forEach(acnt ->{
+			
+		/*	if (acnt.getId().equals( a.getId())){
+				System.out.println("This user already Exists");
+				throw new UsernameAlreadyExistsException();
+			}
+			
+		});*/
+		});
 		return null;
 	}
 	

@@ -1,11 +1,13 @@
 package com.revature.services;
 
 import com.revature.beans.User;
+import java.util.*;
 import com.revature.dao.AccountDao;
 import com.revature.dao.UserDao;
+import com.revature.dao.UserDaoDB;
 
 import com.revature.exceptions.InvalidCredentialsException;
-//import com.revature.exceptions.UsernameAlreadyExistsException;
+import com.revature.exceptions.UsernameAlreadyExistsException;
 /**
  * This class should contain the business logic for performing operations on users
  */
@@ -13,6 +15,7 @@ public class UserService {
 	
 	UserDao userDao;
 	AccountDao accountDao;
+	static UserDaoDB doa = new UserDaoDB();
 	
 	public UserService(UserDao udao, AccountDao adao) {
 		this.userDao = udao;
@@ -39,8 +42,16 @@ public class UserService {
 	 * @throws UsernameAlreadyExistsException if the given User's username is taken
 	 */
 	public void register(User newUser) {
-		
-		
+		List<User> users = doa.getAllUsers();
+		users.forEach(user ->{
+			
+			if (user.getUsername().equals( newUser.getUsername())){
+				System.out.println("This user already Exists");
+				throw new UsernameAlreadyExistsException();
+			}
+			
+		});
+		userDao.addUser(newUser);
 		
 	}
 }

@@ -1,0 +1,78 @@
+package com.revature.dao;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.revature.beans.User;
+
+/**
+ * Implementation of UserDAO that reads/writes to a relational database
+ */
+public class UserDaoDB implements UserDao {
+
+	public User addUser(User user) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public User getUser(Integer userId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public User getUser(String username, String pass) {
+		// TODO Auto-generated method stub
+		User u = null;
+		List<User> runner = getAllUsers();
+		for (User temp : runner) {
+
+			if (username == temp.getUsername() && pass == temp.getPassword()) {
+
+				u = temp;
+				break;
+			}
+
+		}
+	
+	return u;
+
+	}
+
+	public List<User> getAllUsers() {
+		// TODO Auto-generated method stub
+		List<User> users = new ArrayList<>();
+		try (ObjectInputStream ufr = new ObjectInputStream(new FileInputStream(fileLocation))) {
+			users = (List<User>) ufr.readObject();
+		} catch (FileNotFoundException e) {
+			return users;
+		} catch (IOException | ClassNotFoundException e) {
+			System.out.println("Exception thrown in getAllUsers()");
+		}
+		return users;
+	
+	}
+
+	public User updateUser(User u) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public boolean removeUser(User u) {
+		List<User> del = getAllUsers();
+		int fnId = u.getId();
+		User ted = getUser(fnId);
+		del.remove(fnId);
+		if(ted == u) {
+			
+			System.out.println("User Sucessfully deleted");
+			return true;
+		}
+		System.out.println("Unable to remove user. Please check that all information is correct.");
+		return false;
+	}
+
+}

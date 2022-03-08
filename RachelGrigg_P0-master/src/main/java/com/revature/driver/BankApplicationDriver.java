@@ -1,6 +1,5 @@
 package com.revature.driver;
 
-import java.io.IOException;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -8,12 +7,15 @@ import org.apache.log4j.Logger;
 
 import com.revature.beans.*;
 import com.revature.beans.User.UserType;
-import com.revature.dao.*;
+import com.revature.dao.UserDaoDB;
 import com.revature.exceptions.*;
 import com.revature.services.*;
+import com.revature.services.AccountService;
+import com.revature.services.UserService;
+//import com.revature.dao.AccountDao;
+import com.revature.dao.AccountDaoDB;
 
 import com.revature.utils.ConnectionUtil;
-
 
 /**
  * This is the entry point to the application
@@ -22,124 +24,145 @@ public class BankApplicationDriver {
 
 	static User user = new User();
 	static UserDaoDB doa = new UserDaoDB();
-	static UserService use = new UserService(doa, null);
+	static AccountDaoDB aoa = new AccountDaoDB();
+	static UserService use = new UserService(doa, aoa);
+	static AccountService acser = new AccountService(aoa);
 
 	static Scanner scan = new Scanner(System.in);
 	static Logger log = Logger.getLogger(BankApplicationDriver.class);
 
 	public static void main(String[] args) {
-        // your code here...
+		// your code here...
 
-      
+		System.out.println(
+				"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n************************************************\n");
+		System.out.println("\t    Welcome to RevRae Bank");
+		System.out.println("  To log in to an existing account please press 1 \n");
+		System.out.println("\tTo creat a new account please press 2 \n");
+		// System.out.println("\tTo show a list of all existing users please press 3
+		// \n");
+		System.out.println(
+				"************************************************\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 
-        
+		int choice = scan.nextInt();
+		int cve = 0;
+		
+		switch (choice) {
 
-   
+		case 1:
+			
+		//	User tester = new User();
+			
+			System.out.println(" To log in Please ");
+			System.out.println("Enter Username");
+			String usvr = scan.next();
+			System.out.println(" Enter Password ");
+			String pss = scan.next();
+		if (doa.getUser(usvr,pss) == null) {
+			System.out.println("Invalid credentials added");
+		}
+		
+			else
+			System.out.println(use.login(usvr,pss));
+			User logged = use.login(usvr, pss);
+			
+			
+			if( logged.getUserType() == UserType.CUSTOMER) {
+				 cve = 1;}
+				else 
+					cve = 2;
+			
+		switch (cve) {
+		case 1:
+		
+		System.out.println("");
+		System.out.println("Welcome returning customer");
+		System.out.println("Would you like to:");
+		System.out.println("1.Apply for a new account");
+		System.out.println("2.View balance");
+		System.out.println("3.Make a deposit");
+		System.out.println("4.Make a withdrawl");
+		System.out.println("5.Make a transfer");
+		int ucho=scan.nextInt();
+		switch(ucho) {
+		case 1:
+			acser.createNewAccount(logged);
+		case 2:
+			
+		case 3:
+		case 4:
+		case 5:
+		
+		}
+		
+		case 2:
+			System.out.println("Welcome back valued team member");
+			System.out.println("");
+			//approve/reject
+			//view all transactions
+		}
+			break;
 
-            System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n************************************************\n");
-            System.out.println("\t    Welcome to RevRae Bank");
-            System.out.println("To log in to an existing account please press 1 \n");
-            System.out.println("\tTo creat a new account please press 2 \n");
-            System.out.println("************************************************\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-           
-            
-          
-            
-            int choice = scan.nextInt();
+		case 2:
+			// adds new user
+			User u = new User();
 
-            switch (choice) { 
+			System.out.println("Please enter desired username");
+			String username = scan.next();
+			System.out.println("Please enter desired password");
+			String password = scan.next();
 
-            case 1:
-            	
-            	
-            	//login customer
-            		System.out.println(" It makes it to customer login ");
-            		loginUser();
-            		
-            		
-            		
-            		
-            	
-            	
-                  
-                
-                         
-              case 2:
-                	
-            	  BankApplicationDriver.createUser();   
-            	  
-                         break;
-              default:
-          		
-          		System.out.println(" You Have input an invalid entry. Goodbye ");
-          		break;
-            }
+			System.out.println("Please enter your first name");
+			String first_name = scan.next();
 
-        }
+			System.out.println("Please enter your last name");
+			String last_name = scan.next();
 
-    
+			System.out.println("For a customer account pleas press 1");
+			System.out.println("");
+			System.out.println("For an Employee account pleas press 2");
+			int type = scan.nextInt();
 
-    public static void createUser() {
+			u.setUsername(username);
+			u.setPassword(password);
+			u.setFirstName(first_name);
+			u.setLastName(last_name);
+			u.setId(0);
 
-     
-    	//user.setUsername(userName);
-            
+			u.setUserType(UserType.CUSTOMER);
 
-        
+			if (type == 2) {
+				u.setUserType(UserType.EMPLOYEE);
+				System.out.println("gets here3");
 
-      
-    }
+			}
+			System.out.println(u);
+			use.register(u);
 
-public static void loginUser(){
+		default:
 
-   Scanner scan = new Scanner(System.in);
+			// System.out.println(" Why are you here?");
+			break;
 
-        String userName;
+		}
+	}
 
-        while (true) {
-            System.out.println("Please enter username: ");
+	
 
-            userName = scan.nextLine();
-
-            user.getUsername();
-            
-
-            System.out.println("Please enter a password: ");
-            String pass = scan.nextLine();
-
-            user.setPassword(pass);
-
-            user = use.login(userName, pass); 
-
-           // if (user.equals(userName)) 
-
-            	System.out.println("Username already exists. ");
-            	String newU = scan.nextLine();
-            	
-                break;
-}
-
-       
-    }
+	}
 
 // not a real method to be used just a reminder of syntax for now please delete before posting
-	public static void CustomervsEmployee(){
-		
-		User user = new User();
-		user.setUserType(User.UserType.CUSTOMER);
-	
-		 if( user.getUserType() == User.UserType.EMPLOYEE) {
-			 
-			 System.out.println("this is a customer you did it");
-			 //branch off what they can do from here. two methods
-			 
-		 }
-			 
-			 
-		
-		 
-	
-}
-}
+	/*
+	 * public static void CustomervsEmployee(){
+	 * 
+	 * User user = new User(); user.setUserType(User.UserType.CUSTOMER);
+	 * 
+	 * if( user.getUserType() == User.UserType.EMPLOYEE) {
+	 * 
+	 * System.out.println("this is a customer you did it"); //branch off what they
+	 * can do from here. two methods
+	 * 
+	 * }
+	 */
 
 

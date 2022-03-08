@@ -1,6 +1,6 @@
 package com.revature.dao;
 
-import java.util.List;
+import java.util.*;
 import java.io.*;
 
 import com.revature.beans.Account;
@@ -23,16 +23,8 @@ public class AccountDaoFile implements AccountDao {
 	public Account getAccount(Integer actId) {
 		// TODO Auto-generated method stub
 		
-		Account a = null;
-		List<Account> acon = getAccounts();
-		for (Account account: acon) {
-			if (account.getId().equals(actId)) {
-				a = account;
-				break;
-			}
-		}
-		//addAccountsToStream(acon);
-		return a;
+		
+		return null;
 	}
 
 
@@ -40,21 +32,38 @@ public class AccountDaoFile implements AccountDao {
 		// TODO Auto-generated method stub
 		
 		return null;
+		
 	}
 
 	public List<Account> getAccountsByUser(User u) {
 		// TODO Auto-generated method stub
-		return null;
-	}
+		
+	
+		return null;}
+	
 
 	public Account updateAccount(Account a) {
 		// TODO Auto-generated method stub
+		List<Account> accs = getAccounts();
+		try {
+			if (accs.removeIf(acc -> acc.getId().equals(a.getId()))) {
+				accs.add(a);
+				return a;
+			}
+			
+		} finally {
+			//addto thing
+			
+		}
 		return null;
 	}
 
 	public boolean removeAccount(Account a) {
 		// TODO Auto-generated method stub
-		return false;
+		List<Account> getA = getAccounts();
+		boolean getB = getA.removeIf(accon -> accon.equals(a));
+		//addto thing;
+		return getB;
 	}
 
 }
