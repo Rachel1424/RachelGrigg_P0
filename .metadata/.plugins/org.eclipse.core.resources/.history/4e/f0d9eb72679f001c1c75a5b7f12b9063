@@ -1,0 +1,278 @@
+package com.revature.driver;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
+
+import org.apache.log4j.Logger;
+
+import com.revature.beans.*;
+import com.revature.beans.User.UserType;
+import com.revature.dao.UserDaoDB;
+import com.revature.exceptions.*;
+import com.revature.services.*;
+import com.revature.services.AccountService;
+import com.revature.services.UserService;
+//import com.revature.dao.AccountDao;
+import com.revature.dao.AccountDaoDB;
+
+import com.revature.utils.ConnectionUtil;
+
+/**
+ * This is the entry point to the application
+ */
+public class BankApplicationDriver {
+
+	static User user = new User();
+	static UserDaoDB doa = new UserDaoDB();
+	static AccountDaoDB aoa = new AccountDaoDB();
+	static UserService use = new UserService(doa, aoa);
+	static AccountService acser = new AccountService(aoa);
+	private static Connection conec;
+	private static Statement stat;
+	private static PreparedStatement prestat;
+	private static ResultSet rels;
+	static Scanner scan = new Scanner(System.in);
+	static Logger log = Logger.getLogger(BankApplicationDriver.class);
+
+	public static void main(String[] args) {
+		// your code here...
+
+		System.out.println(
+				"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n****************************************************\n");
+		System.out.println("\t\tWelcome to RevRae Bank");
+		System.out.println("  To log in to an existing account please press 1 \n");
+		System.out.println("\tTo creat a new account please press 2 \n");
+		// System.out.println("\tTo show a list of all existing users please press 3
+		// \n");
+		System.out.println(
+				"****************************************************\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+
+		int choice = scan.nextInt();
+		int cve = 0;
+
+		switch (choice) {
+
+		case 1: {
+			// login
+			// User tester = new User();
+
+			System.out.println(" To log in Please ");
+			System.out.println("Enter Username");
+			String usvr = scan.next();
+			System.out.println(" Enter Password ");
+			String pss = scan.next();
+			if (doa.getUser(usvr, pss) == null) {
+				System.out.println("Invalid credentials added");
+			}
+
+			else
+				System.out.println(use.login(usvr, pss));
+			User logged = use.login(usvr, pss);
+			int lgId = logged.getId();
+
+			if (logged.getUserType() == UserType.CUSTOMER) {
+
+				cve = 1;
+			} else {
+				cve = 2;
+			}
+
+			switch (cve) {
+			case 1:
+
+				System.out.println("");
+				System.out.println("Welcome returning customer");
+				System.out.println("Would you like to:");
+				System.out.println("1.Apply for a new account");
+				System.out.println("2.View balance");
+				System.out.println("3.Make a deposit");
+				System.out.println("4.Make a withdrawl");
+				System.out.println("5.Make a transfer");
+				int ucho = scan.nextInt();
+
+				switch (ucho) {
+				case 1:
+
+					System.out.println("Would you like to creat:");
+					System.out.println("1. A checkings account");
+					System.out.println("2. A savings account");
+					int actcho = scan.nextInt();
+					boolean typeb = false;
+
+					if (actcho == 1) {
+
+						typeb = true;
+					}
+
+					acser.createNewAccount(logged, typeb);
+
+					break;
+
+				case 2:
+					List<Account> acl = aoa.getAccountsByUser(logged);
+					System.out.println("Please enter the id of the account you wish to view");
+					for (Account a : acl) {
+						System.out.println("Enter: " + a.getId() + " for Account " + a.getType());
+
+					}
+					int aic = scan.nextInt();
+					Account aB = aoa.getAccount(aic);
+					System.out.println("Your balance is: $" + aB.getBalance());
+
+					break;
+				case 3:
+					break;
+				case 4:
+					break;
+				case 5:
+					break;
+				default:
+					break;
+				}
+
+				break;
+
+			case 2:
+				System.out.println("Welcome back valued team member");
+				System.out.println("");
+				System.out.println("Would you like to:");
+				System.out.println("1. View unapproved accounts?");
+				System.out.println("2. View a customer's transaction history");
+				int emc = scan.nextInt();
+				switch (emc) {
+				case 1:
+					System.out.println("Current unapproved accounts:");
+					List<Account> allA = new ArrayList();
+					List<Account> allUna = new ArrayList();
+					allA = aoa.getAccounts();
+					for (Account a : allA) {
+						if (a.isApproved() == false) {
+							allUna.add(a);
+							System.out.println(a);
+						}
+
+					}
+					System.out.println("Please enter account Id of account you would like to approve/reject:");
+
+					int ap = scan.nextInt();
+					Account apa = aoa.getAccount(ap);
+					System.out.println("For Account:" + apa + "Would you like to");
+					System.out.println("1. Approve");
+					System.out.println("2. Reject");
+					int dec = scan.nextInt();
+					try {
+						conec = DriverManager.getConnection("jdbc:mysql://localhost:3306/revature", "root",
+								"Okaythen12wow");
+						
+						
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					if (dec == 1) {
+						
+						/*try {
+							String query = "UPDATE from accounts where acc_id = " + apa.getId();
+							stat = conec.createStatement();
+							boolean what = false;
+							what = stat.execute(query);
+						} catch (SQLException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}*/
+						aoa.updateAccount(apa);
+						allUna.remove(apa);
+						apa.setApproved(true);
+
+
+					} else if (dec == 2) {
+						boolean deb = false;
+						System.out.println("This account has been rejected");
+						// acser.approveOrRejectAccount(apa, deb);
+					}
+
+					// System.out.println("Account application approved");
+
+					// delete account
+					// "account application denied"
+
+					System.out.println("");
+
+					break;
+				case 2:
+					break;
+
+				}
+				// approve/reject
+				// view all transactions
+				break;
+			}
+		}
+
+			break;
+
+		case 2:
+			// adds new user
+			User u = new User();
+
+			System.out.println("Please enter desired username");
+			String username = scan.next();
+			System.out.println("Please enter desired password");
+			String password = scan.next();
+
+			System.out.println("Please enter your first name");
+			String first_name = scan.next();
+
+			System.out.println("Please enter your last name");
+			String last_name = scan.next();
+
+			System.out.println("For a customer account pleas press 1");
+			System.out.println("");
+			System.out.println("For an Employee account pleas press 2");
+			int type = scan.nextInt();
+
+			u.setUsername(username);
+			u.setPassword(password);
+			u.setFirstName(first_name);
+			u.setLastName(last_name);
+			u.setId(0);
+
+			u.setUserType(UserType.CUSTOMER);
+
+			if (type == 2) {
+				u.setUserType(UserType.EMPLOYEE);
+
+			}
+			// System.out.println(u);
+			use.register(u);
+			break;
+
+		default:
+
+			// System.out.println(" Why are you here?");
+			break;
+		}
+	}
+}
+
+// not a real method to be used just a reminder of syntax for now please delete before posting
+/*
+ * public static void CustomervsEmployee(){
+ * 
+ * User user = new User(); user.setUserType(User.UserType.CUSTOMER);
+ * 
+ * if( user.getUserType() == User.UserType.EMPLOYEE) {
+ * 
+ * System.out.println("this is a customer you did it"); //branch off what they
+ * can do from here. two methods
+ * 
+ * }
+ */

@@ -44,7 +44,6 @@ public class UserDaoDB implements UserDao {
 			rels = stat.executeQuery(query2);
 				
 				
-				
 
 				prestat = conec.prepareStatement(query);
 				prestat.setInt(1, user.getId());
@@ -163,7 +162,9 @@ public class UserDaoDB implements UserDao {
 					nxU.setLastName(rels.getString("last_name"));
 					nxU.setUsername(rels.getString("user_name"));
 					nxU.setPassword(rels.getString("password"));
-					//nxU.setUserType(rels.getUserType());
+					String gotT =rels.getString("usertype");
+					UserType enumVal = UserType.valueOf(gotT);
+					nxU.setUserType(enumVal);
 					
 					users.add(nxU);}
 				}
